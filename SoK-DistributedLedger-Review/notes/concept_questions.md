@@ -1,52 +1,80 @@
-# 💡 Concept Questions: SoK - Communication Across Distributed Ledgers
+# 💡 Concept Questions & 개념 구조 정리: SoK - Communication Across Distributed Ledgers
 
-이 문서는 논문을 읽으며 떠올랐던 개념 중심 질문들을 바탕으로 개념 정리와 응용 이해를 위한 관찰을 구조화한 것입니다.
-
----
-
-## 🧭 Cross-Chain Communication (CCC)이란?
-- CCC는 이기종 블록체인 간 자산/데이터의 **안전하고 동기화된 이동**을 의미
-- 기존 "Atomic Commit" 문제에서 파생됨: 실패 시 전체 롤백 보장 → 블록체인 간에는 적용 어려움
+이 문서는 논문 리뷰 과정에서 제기된 질문, 구조 분석, 개념 정의를 중심으로 구성되었습니다.  
+각 질문은 실제 읽기 중 궁금했던 내용을 기반으로 하며, 핵심 설계 패턴과 구조를 정리합니다.
 
 ---
 
-## 🔁 CCC의 단계별 구성: Commit / Verify / Abort
-- 각 단계마다 TTP / Synchrony / Hybrid 모델 선택 가능
-- Watchtower나 Timelock은 **Crash Fault 대응**을 위해 등장
-- Verifier는 Chain Relay(SPV) 또는 Consensus Committee 등으로 다양함
+## 📌 Cross-Chain Communication (CCC)이란?
+
+- 이기종 블록체인 간 자산/데이터의 안전한 전송을 의미
+- 기존의 원자적 커밋 모델을 블록체인 간에 확장할 때 생기는 한계 극복 필요
 
 ---
 
-## 🔒 Atomic Swap (Symmetric Locks) 핵심
-- 해시락 기반 거래 → A가 `hash(s)`로 자산 잠금 → B도 같은 조건 잠금
-- A가 s 공개하면 B는 동일한 hash 조건으로 자산을 수령
-- ‘단방향 해시성’ + 타임락을 활용해 **중간자나 위조 없이** 자산 교환 보장
+## 🔧 CCC 3단계 설계 구조: Commit → Verify → Abort
+
+### 1️⃣ Commit Phase
+- 자산을 잠그거나 조건부로 제출하는 단계
+- 설계 모델: External Custodian, Escrow, Watchtower 등
+
+### 2️⃣ Verification Phase
+- 상대 블록체인의 커밋이 올바른지 검증
+- 방법: SPV, Chain Relay, Direct Observation, ZKP
+
+### 3️⃣ Abort Phase (Optional)
+- 실패하거나 상대가 응답하지 않는 경우 자산을 회수하기 위한 구조
+- 방법: Timelock, Watchtower, Coordinator
 
 ---
 
-## 🔎 Chain Relay Smart Contract의 한계
-- Merkle Proof나 SPV는 **Tx 포함 여부는 검증**하지만,
-  → **그 Tx가 유효한지는 블록체인 전체 상태를 알아야 판단** 가능
-- ZKP(succinct proof)를 활용하면 **전체 상태 검증 없이도 Tx 유효성 확인 가능**
+## 🔁 Symmetric Atomic Swaps란?
+
+- `A → hash(s)` 조건으로 X체인에 자산 잠금
+- `B → hash(s)` 동일 조건으로 Y체인에 자산 잠금
+- A가 s를 제출해 B의 자산을 수령하면 → B는 공개된 s를 이용해 A의 자산 수령
+- 해시락 기반 대칭 구조로 atomicity 보장
 
 ---
 
-## 🛡️ Watchtower의 역할과 구조
-- 기본 CCC는 참여자 간 동기화에 의존함 → Crash나 Delay 발생 시 중단 위험
-- Watchtower는 패시브하게 모니터링하다가 **Timeout 시 개입**
-  → 사전 설정된 로직을 강제 실행하거나 자산을 보호
+## 🔒 Escrow와 Watchtower의 차이?
+
+| 구조 | 설명 |
+|------|------|
+| Escrow | 조건부 자산 보관자. 자산을 잠가두고 조건 만족 시 풀림 |
+| Watchtower | 자산을 보관하지 않지만 timeout 또는 부정 조건 시 개입 |
 
 ---
 
-## 🔄 Migration vs Exchange 프로토콜
-- Exchange: **자산 교환** (x from X ↔ y from Y), 자산은 각 체인에 남음
-- Migration: 자산을 **다른 체인으로 옮겨서 그곳에서만 유효하게 사용**
-- Migration에서는 자산을 잠그거나 소각하고 **Representation token**을 발행
-- 보통 TTP가 자산을 보관하거나 발행 권한 가짐 → 보편적 설계
+## 🧠 Synchrony Model의 한계
+
+- 대부분 CCC는 **Crash Fault**나 네트워크 지연에 매우 민감
+- 동기화 실패 시 자산이 영구히 잠길 수 있음 → Timelock or Watchtower 필요
 
 ---
 
-## 📌 보완 가능성 및 아이디어
-- CCC 단계를 **스마트 컨트랙트 기반으로 자동화**할 수 있다면?
-- Watchtower를 **ZKP 기반 오프체인 인프라와 결합**할 수 있을까?
-- Overcollateral 구조의 효율성과 경제성 향상 방안은?
+## 🛡 ZKP + CCC 구조?
+
+- CCC의 검증(Verification) 단계에서 ZKP 사용 시,
+- 전체 블록체인 상태를 내려받지 않고도 커밋의 유효성 검증 가능
+- 특히 Chain Relay 구조에서 ZKP로 SPV 한계를 극복 가능
+
+---
+
+## 🔄 Exchange vs Migration Protocols
+
+| 항목 | Exchange | Migration |
+|------|----------|-----------|
+| 목적 | 자산 교환 | 자산 이동 |
+| 구조 | 양방향 / 원자성 강조 | 단방향, 자산 wrapping |
+| TTP 사용 | 최소화 경향 | 일반적으로 존재 |
+| 실사례 | HTLC, Arwen, A2L | tBTC, XCLAIM, Sidechains |
+
+---
+
+## 🔚 결론적 통찰
+
+- CCC 설계는 “신뢰 가정”과 “자동화 구조” 간의 절충
+- 구조를 아는 것이 곧 **보안성과 응용성의 핵심**
+- 향후 ZKP, Collateral 설계와 연계한 실무형 CCC 모델 연구가 가능
+
