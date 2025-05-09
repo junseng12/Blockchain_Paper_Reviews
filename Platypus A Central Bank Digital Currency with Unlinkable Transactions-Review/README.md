@@ -4,14 +4,10 @@
 
 ```
 Blockchain_Paper_Reviews/
-└── Platypus-CBDC-Review/
+└── Platypus-Review/
     ├── README.md
     ├── Platypus_Structure.md
-    ├── images/
-    │   └── .gitkeep
-    └── notes/
-        ├── Concept_QnA.md
-        └── section-by-section-analysis.md
+    └── Concept_QnA.md
 ```
 
 ### 🔍 논문 개요
