@@ -254,15 +254,13 @@ Ethereum 주소: `0x4bbeeb066ed09b7aed07bf39eee0460dfa261520` (체크섬 없음)
 
 예제 주소:
 
-```plain text
-복사편집
+```bash
 0x52908400098527886E0F7030069857D2E4169EE7
 ```
 
 ### **✅ Step 1: 소문자로 변환**
 
-```plain text
-복사편집
+```bash
 0x52908400098527886e0f7030069857d2e4169ee7
 ```
 
@@ -270,8 +268,7 @@ Ethereum 주소: `0x4bbeeb066ed09b7aed07bf39eee0460dfa261520` (체크섬 없음)
 
 해시 결과:
 
-```plain text
-복사편집
+```bash
 0x1c1d9c3f78f6a23e902b101f81eb4ac69b8c5e1d3d1b6783f373c3a68818c1b1
 ```
 
@@ -284,8 +281,7 @@ Ethereum 주소: `0x4bbeeb066ed09b7aed07bf39eee0460dfa261520` (체크섬 없음)
 
 결과적으로 최종 체크섬 적용 주소:
 
-```plain text
-복사편집
+```bash
 0x52908400098527886E0F7030069857D2E4169EE7
 ```
 
@@ -321,8 +317,6 @@ Ethereum 주소: `0x4bbeeb066ed09b7aed07bf39eee0460dfa261520` (체크섬 없음)
 - Solidity에서 `keccak256`을 이용해 체크섬이 올바른지 검증 가능:
 
 ```solidity
-solidity
-복사편집
 function validateAddress(string memory _input) public pure returns (bool) {
     return keccak256(abi.encodePacked(_input)) == keccak256(abi.encodePacked("0x52908400098527886E0F7030069857D2E4169EE7"));
 }
@@ -397,33 +391,29 @@ EIP-155를 적용하면, 기존 트랜잭션 구조에 **"chainId", "0", "0"** �
 기존 구조:
 
 ```json
-json
-복사편집
 {
-    "nonce": 0,
-    "gasPrice": "0x09184e72a000",  // 10 Gwei
-    "gasLimit": "0x30000",  // 200,000 Gas
-    "to": "0xrecipient_address",
-    "value": "0x01",  // 1 wei
-    "data": ""  // 일반 ETH 전송이므로 없음
+  "nonce": 0,
+  "gasPrice": "0x09184e72a000", // 10 Gwei
+  "gasLimit": "0x30000", // 200,000 Gas
+  "to": "0xrecipient_address",
+  "value": "0x01", // 1 wei
+  "data": "" // 일반 ETH 전송이므로 없음
 }
 ```
 
 🚨 **EIP-155 적용 후**
 
 ```json
-json
-복사편집
 {
-    "nonce": 0,
-    "gasPrice": "0x09184e72a000",
-    "gasLimit": "0x30000",
-    "to": "0xrecipient_address",
-    "value": "0x01",
-    "data": "",
-    "chainId": 1,  // Ethereum 메인넷 체인 ID
-    "0": 0,
-    "0": 0
+  "nonce": 0,
+  "gasPrice": "0x09184e72a000",
+  "gasLimit": "0x30000",
+  "to": "0xrecipient_address",
+  "value": "0x01",
+  "data": "",
+  "chainId": 1, // Ethereum 메인넷 체인 ID
+  "0": 0,
+  "0": 0
 }
 ```
 
@@ -451,9 +441,7 @@ json
 
 서명이 완료된 트랜잭션을 Ethereum 네트워크에 전송!
 
-```plain text
-js
-복사편집
+```bash
 const Web3 = require("web3");
 const EthereumTx = require("ethereumjs-tx").Transaction;
 
