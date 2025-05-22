@@ -2,7 +2,7 @@
 
 - Ethereum is a single large **state machine**.
 - Transactions are the **only way to change the state** and the only means of executing smart contracts in the EVM.
-- Only an **external account (EOA)** can create transactions; smart contracts cannot create transactions directly.
+- Only **external accounts (EOA)** can create transactions; smart contracts cannot create transactions directly.
 - Smart contracts only operate when called by other transactions.
   > 📍 Key Summary
   >
@@ -27,8 +27,7 @@ In Ethereum, a transaction is a binary message with the following fields:
 | **v, r, s** | ECDSA values for digital signatures (sender proof) |
 
 - This data is serialized using **RLP encoding**.
-- The **From address** is not included because it can be restored from the **v, r, s values**.
-<details>
+- The **From address** is not included because it can be determined by restoring the public key using the **v, r, s values**.
 <summary>RLP encoding principle and example</summary>
 
 ### 📌 **1. RLP (Recursive Length Prefix) encoding**
@@ -58,7 +57,7 @@ RLP consists of **two main elements**.
    → `0xC0 + list length` + `RLP (each element)`
 5. **Total data is 56 bytes or more**
 
-## → `0xF7 + list length (bytes)` + `RLP (each element)`
+## → `0xF7 + list length (bytes)` + `RLP(each element)`
 
 ### ✅ **RLP encoding example**
 
@@ -71,9 +70,8 @@ RLP consists of **two main elements**.
 4. “cat” → `0x83636174` (RLP conversion)
 5. “dog” → `0x83646F67` (RLP conversion)
 6. List length = `0x83636174` + `0x83646F67` = 6 bytes
-   → `0xC0 + 6 = 0xC6`
-7. Final result: `0xC6 83636174 83646F67`
-</details>
+
+→ `0xC0 + 6 = 0xC6` 4. Final result: `0xC6 83636174 83646F67`
 
 ---
 
@@ -90,7 +88,7 @@ RLP consists of **two main elements**.
 
 ⇒ **Thanks to nonce,** nonce 3 is executed first, and nonce 4 fails, maintaining transaction order.
 
-- Preventing retransmission attacks (duplication prevention)
+- Preventing retransmission attacks (duplicate prevention)
   Even if the same transaction is copied and retransmitted multiple times, duplicate transactions can be prevented because the nonce is different.
 
 ### 🚩 **Nonce precautions**
@@ -104,7 +102,7 @@ RLP consists of **two main elements**.
 
 - The unit of measurement for transaction processing costs in Ethereum.
 - Gas costs are calculated as follows: **Gas Cost = Gas Price × Gas Used**
-- If a transaction exceeds the gas limit, it fails and the state is restored to its original state.
+- If a transaction exceeds the gas limit, it fails and the status is restored to its original state.
 
 ### 🚗 **Understanding with a car analogy**
 
@@ -139,7 +137,6 @@ RLP consists of **two main elements**.
 🔹 Proof of ownership
 🔹 Prevention of transaction repudiation
 🔹 Transaction data integrity assurance
-<details>
 <summary>**Raw Transaction Creation with EIP-155**</summary>
 
 ### **📌 What is EIP-155?**
@@ -151,17 +148,16 @@ EIP-155 is an Ethereum Improvement Proposal (EIP) introduced in 2016 to prevent 
 Previously, Ethereum (ETH) and Ethereum Classic (ETC) shared the same chain, which led to the issue where **a transaction sent on one chain could be executed on the other chain as well**.
 For example:
 
-1. A sends a transaction to B transferring 10 ETH on the Ethereum mainnet 💰
+1. A sends a transaction to B for 10 ETH on the Ethereum mainnet 💰
 2. B copies this transaction and sends it on the Ethereum Classic network 🤯
-3. A unintentionally sends 10 ETC to B as well 😱 (since the accounts share the same private key)
-👉 To address this issue, **EIP-155 introduced a “chain ID” to transactions**.
+3. A unintentionally sends 10 ETC to B 😱 (since the accounts share the same private key)
+👉 To resolve this issue, **EIP-155 introduced a “chain ID” to transactions**.
 👉 Each blockchain is assigned a unique **chain ID**, ensuring that a transaction signed on one network is invalid on another!
-<details>
 <summary>EIP-55 (Ethereum address checksum, different from EIP-155)</summary>
 
 ## **✅ EIP-155 vs EIP-55 Differences**
 
-| EIP         | Concept                                | Role                                                                     | Purpose of introduction                                                                                                                                                     | Example                                                                   |
+| EIP         | Concept                                | Role                                                                     | Purpose                                                                                                                                                                     | Example                                                                   |
 | ----------- | -------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | **EIP-155** | **Prevent transaction replay**         | **Add chain ID** to distinguish transactions between networks            | **Introduced to prevent replay attacks, where transactions are executed repeatedly on different chains (such as Ethereum and Ethereum Classic) after chains are separated** | _Chain ID:_ _`1`_ _(Ethereum),_ _`61`_ _(Ethereum Classic) etc._          |
 | **EIP-55**  | **Address Checksum (typo prevention)** | Adds a **case-sensitive checksum** to Ethereum addresses to detect typos | **Prevents incorrect Ethereum address input, prevent users from accidentally sending funds to the wrong address**                                                           | _`0x52908400098527886E0F7030069857D2E4169EE7`_ _(EIP-55-applied address)_ |
@@ -183,7 +179,7 @@ and can be represented using only lowercase or uppercase letters.
 
 ## **📍 Background of EIP-55 (Why is it necessary?)**
 
-Ethereum's address system, unlike Bitcoin's, used a **pure hexadecimal (hex) format without a checksum**.
+Ethereum's address system, unlike Bitcoin's, used a **pure hexadecimal format without a checksum**.
 In other words, **Ethereum addresses originally had no typo detection functionality**.
 For example:
 Bitcoin address: `1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa` (with checksum)
@@ -200,13 +196,13 @@ Ethereum address: `0x4bbeeb066ed09b7aed07bf39eee0460dfa261520` (no checksum)
 
 ---
 
-## **📍 EIP-55 Checksum Application Method (How Does It Work?)**
+## **📍 EIP-55 Checksum Application Method (How does it work?)**
 
 ### **🚀 1️⃣ Basic Principle**
 
-1. Convert the **hexadecimal representation** of the Ethereum address to **lowercase** (excluding `0x`)
+1. Convert all **hexadecimal representations** of the Ethereum address to **lowercase** (excluding `0x`)
 2. Generate a **Keccak-256 hash** (Keccak is the SHA3 hash algorithm used by Ethereum)
-3. Use the generated hash value to **convert some characters in the address string to uppercase**
+3. Use the generated hash value to **convert some characters to uppercase** in the address string
 
 - Look at each byte of the Keccak hash value, and if it is greater than 7, change the corresponding character to uppercase
 
@@ -277,8 +273,8 @@ Hash result:
 
 ```solidity
 function validateAddress(string memory _input) public pure returns (bool) {
-
-return keccak256(abi.encodePacked(_input)) == keccak256(abi.encodePacked(“0x52908400098527886E0F7030069857D2E4169EE7”));
+   return keccak256(abi.encodePacked(_input))
+   == keccak256(abi.encodePacked(“0x52908400098527886E0F7030069857D2E4169EE7”));
 }
 ```
 
@@ -297,7 +293,7 @@ For example:
 
 ## **📍 Limitations of EIP-55**
 
-✔️ EIP-55 can **detect typos but does not correct them**
+✔️ EIP-55 can **detect typos but cannot correct them**
 ✔️ **Software that only recognizes addresses with checksums may recognize addresses without checksums as errors**
 ✔️ **If you mainly use QR code scanning or copy-paste, the checksum feature may not be necessary**
 
@@ -316,8 +312,8 @@ For example:
 
 ### **🔹 Benefits of implementing EIP-55**
 
-✔️ **Prevents typos when manually entering addresses**
-✔️ **Wallets automatically detect errors when incorrect addresses are entered**
+✔️ **Prevents typos during manual input**
+✔️ **Wallets automatically detect errors when an incorrect address is entered**
 ✔️ **Does not resolve security issues such as replay attacks, but prevents mistakes when sending transactions**
 
 ---
@@ -325,26 +321,25 @@ For example:
 📌 **EIP-55 does not protect transactions; it reduces “address input errors”!**
 📌 **Most wallets and block explorers in the Ethereum ecosystem have implemented the EIP-55 checksum!** ✅
 
-## </details>
+---
 
-### **📌 Process of creating a raw transaction with EIP-155**
+### **📌 Process of generating a raw transaction with EIP-155**
 
-Let's take a step-by-step look at how to create a transaction using the EIP-155 method.
+Let's take a step-by-step look at how to generate a transaction using the EIP-155 method.
 
-### **📍 Step 1: Transaction Data Configuration**
+### **📍 Step 1: Constructing transaction data**
 
-When applying EIP-155, the following is added to the existing transaction structure: **“chainId”, “0”, ‘0’**.
+When applying EIP-155, **“chainId”, “0”, “0”** are added to the existing transaction structure.
 Existing structure:
 
-```json
+````json
 {
-  “nonce”: 0,
-
-“gasPrice”: “0x09184e72a000”, // 10 Gwei
-  “gasLimit”: “0x30000”, // 200,000 Gas
-  “to”: “0xrecipient_address”,
-  “value”: “0x01”, // 1 wei
-  ‘data’: “” // None, as this is a standard ETH transfer
+  "nonce": 0,
+  "gasPrice": "0x09184e72a000", // 10 Gwei
+  "gasLimit": "0x30000", // 200,000 Gas
+  "to": "0xrecipient_address",
+  "value": "0x01", // 1 wei
+  "data": "" // None, as this is a regular ETH transfer
 }
 ```
 
@@ -352,35 +347,36 @@ Existing structure:
 
 ```json
 {
-  “nonce”: 0,
-  “gasPrice”: “0x09184e72a000”,
-  “gasLimit”: “0x30000”,
-  ‘to’: “0xrecipient_address”,
-
-“value”: “0x01”,
-  “data”: “”,
-  “chainId”: 1, // Ethereum mainnet chain ID
-  “0”: 0,
-  “0”: 0
+  "nonce": 0,
+  "gasPrice": "0x09184e72a000",
+  "gasLimit": "0x30000",
+  "to": "0xrecipient_address",
+  "value": "0x01",
+  "data": "",
+  "chainId": 1, // Ethereum mainnet chain ID
+  "0": 0,
+  "0": 0
 }
 ```
 
+
 ✔️ **Added chain ID**
+
 ✔️ **Added ‘0’, “0” fields**
 
 ---
 
 ### **📍 Step 2: Sign the transaction**
 
-After **RLP-encoding** the transaction data, you must apply the Keccak-256 hash to the value and sign it.
+After RLP-encoding the transaction data, you must sign the value obtained by applying the Keccak-256 hash.
 👉 **Signing method**
 
 1. RLP-encode the transaction created above
 2. Apply Keccak-256 hashing
 3. Generate the v, r, and s signatures using **ECDSA signing**
 
-- The v value is changed to **“chainId \* 2 + 35 or 36”** (EIP-155 applied)
-  - Example: `v = (1 * 2) + 35 = 37`
+- The v value is changed to the format **“chainId \* 2 + 35 or 36”** (EIP-155 applied)
+- Example: `v = (1 * 2) + 35 = 37`
 
 ---
 
@@ -391,20 +387,21 @@ Send the signed transaction to the Ethereum network!
 ```bash
 const Web3 = require(“web3”);
 const EthereumTx = require(“ethereumjs-tx”).Transaction;
+
 const web3 = new Web3(“https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID”);
+
 const rawTx = {
-    nonce: web3.utils.toHex(0),
-
+nonce: web3.utils.toHex(0),
 gasPrice: web3.utils.toHex(web3.utils.toWei(“10”, ‘gwei’)),
-    gasLimit: web3.utils.toHex(21000),
+gasLimit: web3.utils.toHex(21000),
 to: “0xRecipientAddress”,
-
 value: web3.utils.toHex(web3.utils.toWei(“0.1”, “ether”)),
-    chainId: 1  // EIP-155 적용
-};
-const privateKey = Buffer.from(‘YOUR_PRIVATE_KEY’, “hex”);
+chainId: 1 // EIP-155 applied};
+
+const privateKey = Buffer.from(“YOUR_PRIVATE_KEY”, ‘hex’);
 const tx = new EthereumTx(rawTx, { chain: “mainnet” });
 tx.sign(privateKey);
+
 const serializedTx = tx.serialize();
 web3.eth.sendSignedTransaction(“0x” + serializedTx.toString(‘hex’))
 .on(“receipt”, console.log);
@@ -412,7 +409,7 @@ web3.eth.sendSignedTransaction(“0x” + serializedTx.toString(‘hex’))
 
 ✔️ **EIP-155 applied**
 ✔️ **Includes chain ID → Prevents replay attacks**
-✔️ **Sign and send**
+✔️ **Sign before sending**
 
 ---
 
@@ -421,23 +418,24 @@ web3.eth.sendSignedTransaction(“0x” + serializedTx.toString(‘hex’))
 🔗 **Before EIP-155**
 ➡️ “A package sent from Seoul is still valid in Busan” (executed on other chains)
 🔗 **After EIP-155**
-➡️ “A tag saying ‘Republic of Korea’ is attached to the package so that it is not valid in the United States!” (Distinguishes between networks)
+➡️ “A tag labeled `South Korea` is attached to the package, making it invalid in the US!” (Distinguishes between networks)
 
-## </details>
+---
 
-## 📌 7**. Offline Signing**
+## 📌 7. Offline Signing
 
-- A method of separating transaction creation and signing.
-- Used to minimize the risk of exposing private keys.
-  | Step | Description |
+- A method that separates transaction creation and signing.
+- Used to minimize the risk of private key exposure.
+  | Step | Description
   | ---- | -------------------------------------- |
-  | ① | Create an unsigned transaction on an online computer |
-  | ② | Transfer to an offline computer and sign |
-  | ③ | Transfer the signed transaction back online |
-  | ④ | Send the signed transaction to the network |
+  | ① | Create unsigned transaction on online computer |
+  | ② | Transfer to offline computer and sign |
+  | ③ | Transfer signed transaction back online |
+  | ④ | Send signed transaction to network |
 
 ## 📌 8**. Multi-Signature**
 
 - A transaction method that requires multiple signatures.
-- Can be implemented as a **contract**.
+- Can be implemented using a **contract**.
 - Example: Ether can only be transferred if 2 out of 3 signers sign (2-of-3).
+````

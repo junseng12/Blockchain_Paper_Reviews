@@ -142,7 +142,6 @@ DApp의 보안은 **건물**의 **철저한 점검**과 같습니다. 건물을 
 
 ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/c2ba559c-cb6d-4c61-bec3-1760fafc9a92/afb39e5d-a7a1-4530-8e3b-afd757489c93/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB4665QIMJDI5%2F20250521%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250521T213909Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEA4aCXVzLXdlc3QtMiJHMEUCIHJTt%2BHneNJ%2FAJTIRZoyBZ54grrgzSexqEVEqplW5LJ2AiEAp7BUEYN7%2BNioinPdM%2FwZAT%2FHfFnF9IVKC4fiGMXa4JsqiAQIxv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDFO46DAptCscg%2BifASrcAxXFKxyjh7ZHod%2BGP1CjpJ8HFRvrTDQVF7xFhm%2BfDiPQV4XC2F0DEmYYvc9v5TKOnJoUeKQV%2FjUE3yz3cDBdJ5ZGB0R8dql8zgyjUkIWRd4gSRfkKsgltFrm%2BNWUWlVhj0CzI5HGwlC0Dt2hPyQnsuuuVQCwdIBbIbCgPey9waP7VMTZf%2BenQsfwaJfZ9%2FUilz18xVcg7kzM276zapt7%2BdjgVOfvOnrAenBfEi2g0nJQEF9yQ9L9RGfRoWm0iyg5iQVujGMwpKV8wjRSnzzQE5MHQKj4Wm8adpFD6p1CT4FECa3U4zqbEjyy%2BgD14yHC4%2B08IIId35yAVb0ZjKhdZdX8QLH4q0y0IxujuIgTdxYhomRbML2TNTjI3pUn%2BCdrLTXKPicTUV7zRk3eeAPMe0%2BOYpgCtvUJqeCy1snWaAIo6J0t3BzpN4IsyS05%2Fvv5PSm3AMFnZsquyuE64ZsRVTnTl5HSYim0UsiBDEtuWiTVpza1PnrrYO2Yck2dZUr8Zn4qkU5LxvLTcHdCCV8kJwWT8JOMk7I0xOuafDojGajfKR0XWoiWLfNIz0S9GFuOtmyVaD9%2FYQ6azyGzmSZd6zYkHbpfzz0LezQZ6A3IenHLTagDgE8BJYslNQpNMPiGucEGOqUBbqoKwN11cvgVknxbWz11tGqDLWmlGwjIBYSdJYmOZ2913DfmCXVAIOLyL1QhfNl87kEHUTM5hWWHzTKU8lb0gWcLI0slkPKZ25PXp2FnZh7OnhTvZ3X0qsncb9iOCKNtC%2BYsRpiksMsV9YScJaOT6Q9AKrpQWPPeybD9CttLm1Adc6kw8tQ77%2BQhA9%2FcJf4YFGz8MA6mq%2FhmS2oWVJ81tv2eRxtf&X-Amz-Signature=52cdf5de4450e4b20b97f29dbeafa6a4760886bf34e7f033585f8e7ff5817265&X-Amz-SignedHeaders=host&x-id=GetObject)
 
-<details>
 <summary>**ENS(이더리움 네임 서비스) 구체적인 원리**</summary>
 
 **ENS**는 이더리움 블록체인에서 사용되는 **도메인 이름 시스템(DNS)**에 대한 대안입니다. ENS의 **기본 원리**는 **블록체인** 상에서 **도메인**과 **리소스를 연결**하는 **탈중앙화된 이름 서비스**를 제공하는 것입니다. 간단히 말해서, **ENS는 DNS의 블록체인 버전**입니다.
@@ -236,9 +235,6 @@ ENS는 **이더리움 블록체인**을 활용하여 도메인 이름과 다른 
 - **유연성**: ENS는 **다양한 리소스**(이더리움 주소, Swarm 해시 등)에 대한 연결을 지원합니다.
 - **검열 저항성**: 블록체인 기반이므로 누구도 ENS 시스템을 **검열하거나 제어**할 수 없습니다.
 
-</details>
-
-<details>
 <summary>**ENS 내 해시 함수**</summary>
 
 ### **1. 해시 함수의 특성**
@@ -270,8 +266,6 @@ Namehash는 마치 **전화번호부에서 각 사람에게 고유한 번호**�
 - **충돌 가능성**을 완전히 배제할 수는 없지만, 실용적인 범위 내에서 ENS는 안전하게 **각 도메인을 고유하게 관리**할 수 있습니다.
 
 따라서 ENS의 **기본 설계는 충분히 안전**하고, 서로 다른 ENS 이름들이 **동일한 콘텐츠를 가리키는 일이 일어나지 않도록 보장**됩니다.
-
-</details>
 
 📌 **비유:**
 

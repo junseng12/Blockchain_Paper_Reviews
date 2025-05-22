@@ -75,8 +75,6 @@ Solidity는 **선언된 변수나 상태가 언제 바뀌는지 명확하지 않
 💡 **예제 코드:**
 
 ```python
-python
-복사편집
 @public
 def withdraw(amount: uint256):
     assert self.balance >= amount  # Condition
@@ -110,8 +108,6 @@ Solidity에서는 `SafeMath` 라이브러리를 사용해야 오버플로우(Ove
 💡 Solidity 코드 (취약한 코드)
 
 ```solidity
-solidity
-복사편집
 uint256 a = 2**256 - 1;
 a = a + 1;  // Overflow 발생 → 0이 됨
 ```
@@ -127,7 +123,6 @@ a = a + 1;  // Overflow 발생 → 0이 됨
 
 📌 **로그(Log)는 컨트랙트 내부에서는 읽을 수 없고, Etherscan 같은 외부 서비스에서만 확인 가능!**
 
-<details>
 <summary>Log VS. Function</summary>
 - **이벤트(****`event`****)와 함수 실행의 차이**
 
@@ -158,8 +153,6 @@ a = a + 1;  // Overflow 발생 → 0이 됨
 - 도장을 보고 "이게 진짜 문서구나!" 하고 확인할 수 있지만, 문서를 작성하는 데 영향을 주진 않음.
 
 ➡️ **이벤트 로그도 마찬가지로 "트랜잭션이 실제로 발생했다"는 것을 남기는 용도!**
-
-</details>
 
 ## **※ Vyper의 온라인 코드 에디터 & 컴파일러**
 

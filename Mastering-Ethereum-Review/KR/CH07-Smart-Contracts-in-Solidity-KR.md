@@ -13,7 +13,6 @@ Ethereum에서는 **두 가지 유형의 계정**이 존재합니다.
 
 ➡️ **즉, 스마트 컨트랙트(Smart Contract)는 코드가 실행되는 컨트랙트 계정(CA)이다.**
 
-<details>
 <summary>Solidity의 특징과 구조</summary>
 
 Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어진 **고수준 프로그래밍 언어**입니다.
@@ -21,8 +20,6 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
 - **객체 지향 프로그래밍(OOP) 기반**
 - **JavaScript/C++와 유사한 문법**
 - **Ethereum Virtual Machine(EVM)에서 실행되는 바이트코드로 컴파일됨**
-
-</details>
 
 ---
 
@@ -39,6 +36,8 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
 
 📌 **즉, 컨트랙트는 자체적으로 실행되지 않고 EOA가 발생시킨 트랜잭션에 의해 실행됨!**
 
+---
+
 ## 📌 **3️⃣ 스마트 컨트랙트의 생명 주기**
 
 스마트 컨트랙트는 **4가지 단계**로 구성됩니다.
@@ -48,9 +47,7 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
 - Solidity 코드 작성 → `solc`를 사용하여 바이트코드로 변환.
 - 컴파일 시 **ABI(Application Binary Interface) 생성**.
 
-  ```solidity
-  solidity
-  복사편집
+```solidity
   pragma solidity ^0.8.0;
   contract Faucet {
       function withdraw(uint withdraw_amount) public {
@@ -58,10 +55,10 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
       }
       receive() external payable {} // 이더 수신 가능
   }
-  ```
+```
 
-  - `solc --bin Faucet.sol` → 바이트코드 출력
-  - `solc --abi Faucet.sol` → ABI 출력
+- `solc --bin Faucet.sol` → 바이트코드 출력
+- `solc --abi Faucet.sol` → ABI 출력
 
 ### 🔹 2) 배포 (Deployment)
 
@@ -69,9 +66,7 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
 - `to` 필드는 `null`
 - 컨트랙트 주소는 **(배포자 주소 + nonce)** 조합으로 결정됨.
 
-  ```solidity
-  solidity
-  복사편집
+```solidity
   const tx = {
       from: "0xYourEOAAddress",
       to: null,  // 컨트랙트 배포이므로 null 설정
@@ -80,7 +75,7 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
       gasPrice: web3.utils.toWei('20', 'gwei')
   };
   web3.eth.sendTransaction(tx);
-  ```
+```
 
 ### 🔹 3) 실행 (Execution)
 
@@ -93,8 +88,6 @@ Solidity는 이더리움 스마트 컨트랙트를 작성하기 위해 만들어
 - 이더리움에서 데이터가 사라지는 유일한 방법.
 
 ```solidity
-solidity
-복사편집
 function destroy() public {
     require(msg.sender == owner, "Only owner can destroy");
     selfdestruct(payable(owner));
@@ -102,6 +95,8 @@ function destroy() public {
 ```
 
 📌 **하지만 과거 트랜잭션 기록은 블록체인에 남아 있음!**
+
+---
 
 ## 📌 **5️⃣ Gas와 가스 최적화**
 
@@ -128,6 +123,8 @@ function destroy() public {
 3. **Loops 최소화** (`for` 대신 `mapping`)
 4. **상태 변수 읽기 최소화** (`uint`을 `uint8`로 줄이기)
 
+---
+
 ## 📌 **6️⃣ Solidity의 보안 고려 사항**
 
 Solidity에서 보안 취약점은 **직접적인 금전적 손실**로 이어질 수 있음.
@@ -137,8 +134,6 @@ Solidity에서 보안 취약점은 **직접적인 금전적 손실**로 이어�
 - 컨트랙트에서 이더를 보낼 때, 공격자가 재귀 호출하여 여러 번 출금하는 공격.
 
 ```solidity
-solidity
-복사편집
 function withdraw(uint _amount) public {
     require(balances[msg.sender] >= _amount, "잔액 부족");
     payable(msg.sender).transfer(_amount);
@@ -150,7 +145,7 @@ function withdraw(uint _amount) public {
 
 - `transfer()` 대신 `call.value` 사용
 - 상태 변경을 먼저 수행 (`checks-effects-interactions` 패턴 적용)4
-<details>
+
 <summary>✅ **Reentrancy Attack을 이해하기 쉽게 비유로 설명하기**</summary>
 
 **💡 비유:**
@@ -162,11 +157,7 @@ function withdraw(uint _amount) public {
 - 이때, 은행 시스템이 **잔액을 업데이트하기 전에 출금 요청을 여러 번 처리**하게 되면 어떻게 될까?
   → 고객이 **실제 잔액보다 많은 돈을 출금할 수 있음**! 💸💸💸
 
-</details>
-
 ```solidity
-solidity
-복사편집
 function withdraw(uint _amount) public {
     require(balances[msg.sender] >= _amount, "잔액 부족");
     balances[msg.sender] -= _amount;  // ✅ 상태 변경 먼저!
@@ -179,11 +170,12 @@ function withdraw(uint _amount) public {
 - Solidity 0.8 이상에서는 자동 방지됨.
 
 ```solidity
-solidity
-복사편집
+
 // Solidity 0.7 이하에서는 SafeMath 사용 필요!
 using SafeMath for uint256;
 ```
+
+---
 
 ## **7️⃣ 스마트 컨트랙트에서의 이벤트 활용**
 
@@ -192,8 +184,6 @@ using SafeMath for uint256;
 ### ✅ **이벤트 선언 및 사용 예시**
 
 ```solidity
-solidity
-복사편집
 contract Example {
     event Transferred(address indexed _from, address indexed _to, uint _value);
 
@@ -221,8 +211,6 @@ contract Example {
 ### 🔹 **Solidity 코드로 표현하면:**
 
 ```solidity
-solidity
-복사편집
 contract A {
     function callB(address _b) public {
         B(_b).someFunction();  // A가 B를 호출
@@ -264,8 +252,6 @@ contract A {
 어떤 악성 컨트랙트가 `tx.origin`을 검증 조건으로 사용하면, 공격자가 다른 컨트랙트를 통해 호출하는 방식으로 속일 수 있다.
 
 ```solidity
-solidity
-복사편집
 contract Malicious {
     function attack(Victim victim) public {
         victim.withdrawAll(); // 공격자가 Victim 컨트랙트를 실행하게 함
@@ -281,6 +267,8 @@ contract Victim {
 
 - 만약 Victim 컨트랙트가 `tx.origin == owner`를 사용하면, **공격자가 중간 컨트랙트(Malicious)를 이용해 호출하더라도** **`tx.origin`\*\***은 여전히 원래의 EOA(피해자)가 됨\*\*.
 - 따라서 **msg.sender로만 검증해야 안전**하다.
+
+---
 
 ### 🔥 **결론: 왜** **`tx.origin`\*\***이 위험한가?\*\*
 

@@ -28,7 +28,7 @@
 
 - 이 데이터는 **RLP 인코딩**으로 직렬화됨.
 - **From 주소**가 포함되지 않는데, 이는 **v, r, s 값을 통해 공개키를 복원하여 알 수 있기 때문**.
-<details>
+
 <summary>RLP 인코딩 원리 및 예시</summary>
 
 ### 📌 **1. RLP (Recursive Length Prefix) 인코딩**
@@ -79,8 +79,6 @@ RLP는 **두 가지 주요 요소**로 이루어진다.
 3. 리스트 길이 = `0x83636174` + `0x83646F67` = 6바이트
    → `0xC0 + 6 = 0xC6`
 4. 최종 결과: `0xC6 83636174 83646F67`
-
-</details>
 
 ---
 
@@ -155,7 +153,6 @@ RLP는 **두 가지 주요 요소**로 이루어진다.
 
   🔹 거래 데이터 무결성 보장
 
-<details>
 <summary>**Raw Transaction Creation with EIP-155**</summary>
 
 ### **📌 EIP-155란?**
@@ -176,7 +173,6 @@ EIP-155는 **리플레이 공격(Replay Attack) 방지**를 위한 이더리움 
 
 👉 각 블록체인마다 고유한 **체인 ID**를 부여해서, 한 네트워크에서 서명한 트랜잭션이 다른 네트워크에서 무효하도록 만듦!
 
-<details>
 <summary>EIP-55(이더리움 주소 체크섬, EIP-155랑 다름)</summary>
 
 ## **✅ EIP-155 vs EIP-55 차이점**
@@ -318,8 +314,9 @@ Ethereum 주소: `0x4bbeeb066ed09b7aed07bf39eee0460dfa261520` (체크섬 없음)
 
 ```solidity
 function validateAddress(string memory _input) public pure returns (bool) {
-    return keccak256(abi.encodePacked(_input)) == keccak256(abi.encodePacked("0x52908400098527886E0F7030069857D2E4169EE7"));
-}
+    return keccak256(abi.encodePacked(_input))
+    == keccak256(abi.encodePacked("0x52908400098527886E0F7030069857D2E4169EE7"));
+   }
 ```
 
 ✔️ 이더리움 스마트 컨트랙트에서도 주소의 유효성을 체크할 수 있음!
@@ -375,8 +372,6 @@ function validateAddress(string memory _input) public pure returns (bool) {
 📌 **EIP-55는 트랜잭션을 보호하는 것이 아니라, "주소 입력 실수"를 줄이는 역할을 한다!**
 
 📌 **Ethereum 생태계에서 지갑과 블록 탐색기들은 대부분 EIP-55 체크섬을 적용하고 있다!** ✅
-
-</details>
 
 ---
 
@@ -448,13 +443,12 @@ const EthereumTx = require("ethereumjs-tx").Transaction;
 const web3 = new Web3("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");
 
 const rawTx = {
-    nonce: web3.utils.toHex(0),
-    gasPrice: web3.utils.toHex(web3.utils.toWei("10", "gwei")),
-    gasLimit: web3.utils.toHex(21000),
-    to: "0xRecipientAddress",
-    value: web3.utils.toHex(web3.utils.toWei("0.1", "ether")),
-    chainId: 1  // EIP-155 적용
-};
+nonce: web3.utils.toHex(0),
+gasPrice: web3.utils.toHex(web3.utils.toWei("10", "gwei")),
+gasLimit: web3.utils.toHex(21000),
+to: "0xRecipientAddress",
+value: web3.utils.toHex(web3.utils.toWei("0.1", "ether")),
+chainId: 1 // EIP-155 적용};
 
 const privateKey = Buffer.from("YOUR_PRIVATE_KEY", "hex");
 const tx = new EthereumTx(rawTx, { chain: "mainnet" });
@@ -462,7 +456,8 @@ tx.sign(privateKey);
 
 const serializedTx = tx.serialize();
 web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex"))
-    .on("receipt", console.log);
+.on("receipt", console.log);
+
 ```
 
 ✔️ **EIP-155 적용됨**
@@ -482,8 +477,6 @@ web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex"))
 🔗 **EIP-155 후**
 
 ➡️ "택배에 `대한민국`이라는 태그를 붙여서, 미국에서는 유효하지 않도록 만듦!" (네트워크 간 구분)
-
-</details>
 
 ---
 

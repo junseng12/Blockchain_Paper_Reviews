@@ -118,7 +118,6 @@
 
 3️⃣ **토큰 전송 시 가스를 ETH로 지불해야 함 (토큰 자체로 가스 비용 결제 불가)**
 
-<details>
 <summary>ERC- 20에서의 Transfer VS. Allowance, TransferFrom</summary>
 
 ### **1️⃣ ETH & BTC vs. ERC-20 토큰의 근본적인 차이**
@@ -176,8 +175,6 @@ ERC-20 토큰은 다음 두 가지 방식으로 전송할 수 있음.
 ### **(1) 직접 전송 (transfer)**
 
 ```solidity
-solidity
-복사편집
 function transfer(address to, uint256 amount) public returns (bool);
 ```
 
@@ -190,8 +187,6 @@ function transfer(address to, uint256 amount) public returns (bool);
 ### **(2) 허용 & 대리 전송 (approve & transferFrom)**
 
 ```solidity
-solidity
-복사편집
 function approve(address spender, uint256 amount) public returns (bool);
 function transferFrom(address from, address to, uint256 amount) public returns (bool);
 ```
@@ -221,8 +216,6 @@ function transferFrom(address from, address to, uint256 amount) public returns (
 - 내가 거래소 컨트랙트에게 **"내 토큰 중에서 최대 100개를 사용해도 돼"** 라고 허가를 줌.
 
 ```solidity
-solidity
-복사편집
 ERC20Token.approve(exchangeContract, 100);
 ```
 
@@ -233,8 +226,6 @@ ERC20Token.approve(exchangeContract, 100);
 - 사용자가 거래소에서 토큰을 입금할 때, 거래소 컨트랙트가 직접 내 지갑에서 가져감.
 
 ```solidity
-solidity
-복사편집
 ERC20Token.transferFrom(userAddress, exchangeAddress, 100);
 ```
 
@@ -253,8 +244,6 @@ ERC20Token.transferFrom(userAddress, exchangeAddress, 100);
 ✅ **거래소, 디파이 같은 서비스에서 자동으로 토큰을 인출하려면** **`approve()`\*\***와\*\* **`transferFrom()`** **방식이 필요!**
 
 👉 **즉, ERC-20 토큰이 허용 방식을 쓰는 이유는 "사용자가 직접 송금하지 않고도, 다른 컨트랙트나 거래소가 대신 토큰을 관리할 수 있도록 하기 위해서"임!** 🚀
-
-</details>
 
 ## 📌 **ERC-20 개선안**
 
@@ -400,7 +389,6 @@ ERC-20 토큰을 사용해서 디파이(DeFi) 플랫폼에 예치(Deposit)하고
 
 👉 **결국 DeFi의 모든 거래도, "ERC-20 컨트랙트 내 데이터 조작"이 핵심!**
 
-<details>
 <summary>AAVE 원리</summary>
 
 ### **📌 AAVE를 이해하는 핵심 요약**
@@ -533,7 +521,3 @@ AAVE는 **담보 기반 대출 시스템**을 사용하기 때문에, 대출자�
 ✅ 예치자는 **aToken(aUSDT, aDAI 등)을 보유하고 있으면 자동으로 이자가 지급됨**.
 
 👉 **결국 AAVE에서 받는 이자는 "내가 예치한 자금을 다른 사람이 빌려가고, 그 대출 이자로 나에게 보상이 주어지는 것"임!** 🚀
-
----
-
-</details>

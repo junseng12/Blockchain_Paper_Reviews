@@ -22,8 +22,6 @@
 ### 📌 **취약 코드 예시**
 
 ```solidity
-solidity
-복사편집
 function withdraw(uint _amount) public {
     require(balances[msg.sender] >= _amount);
     payable(msg.sender).transfer(_amount);  // 🔥 취약점 발생!
@@ -42,8 +40,6 @@ function withdraw(uint _amount) public {
 ✅ **보완된 코드**
 
 ```solidity
-solidity
-복사편집
 bool private locked;
 function withdraw(uint _amount) public {
     require(!locked, "Reentrancy detected!");
@@ -65,8 +61,6 @@ function withdraw(uint _amount) public {
 ### 📌 **취약 코드 예시**
 
 ```solidity
-solidity
-복사편집
 function setBalance(uint _amount) public {
     balance[msg.sender] += _amount;  // 🔥 오버플로우 발생 가능
 }
@@ -80,8 +74,6 @@ function setBalance(uint _amount) public {
 ✅ **보완된 코드 (SafeMath 적용)**
 
 ```solidity
-solidity
-복사편집
 using SafeMath for uint256;
 
 function setBalance(uint _amount) public {
@@ -101,8 +93,6 @@ function setBalance(uint _amount) public {
 ### 📌 **취약 코드 예시**
 
 ```solidity
-solidity
-복사편집
 function withdraw() public {
     require(tx.origin == owner, "Not the owner!");  // ❌ 보안 취약
     payable(msg.sender).transfer(address(this).balance);
@@ -117,8 +107,6 @@ function withdraw() public {
 ✅ **보완된 코드**
 
 ```solidity
-solidity
-복사편집
 function withdraw() public {
     require(msg.sender == owner, "Not the owner!");  // ✅ 안전한 방식
     payable(msg.sender).transfer(address(this).balance);
@@ -136,8 +124,6 @@ function withdraw() public {
 ### 📌 **취약 코드 예시**
 
 ```solidity
-solidity
-복사편집
 function sendFunds(address payable recipient, uint amount) public {
     recipient.call{value: amount}("");  // ❌ 반환 값 체크 안 함
 }
@@ -151,8 +137,6 @@ function sendFunds(address payable recipient, uint amount) public {
 ✅ **보완된 코드**
 
 ```solidity
-solidity
-복사편집
 function sendFunds(address payable recipient, uint amount) public {
     (bool success, ) = recipient.call{value: amount}("");
     require(success, "Transfer failed!"); // ✅ 반환 값 체크
@@ -168,7 +152,6 @@ function sendFunds(address payable recipient, uint amount) public {
 ### ✅ **왜** **`transfer()`\*\***가 더 안전한가?\*\*
 
 ```solidity
-solidity
 recipient.transfer(amount);
 ```
 
@@ -177,7 +160,6 @@ recipient.transfer(amount);
 
 📌 **즉, 가능하면** **`transfer()`\*\***를 사용하고, 반드시\*\* **`call()`\*\***을 사용할 경우 반환값을 확인해야 한다!\*\*
 
-<details>
 <summary>비유 및  구체적인 악용 예시</summary>
 
 ### 💡 **이해하기 쉬운 비유**
@@ -246,8 +228,6 @@ recipient.transfer(amount);
 
 이처럼, 이 공격 기법은 해커가 직접 돈을 훔쳐가는 게 아니라 **컨트랙트를 마비시키거나, 특정 사용자만 출금할 수 있게 만드는 데 활용될 수 있어.**
 
-</details>
-
 ---
 
 ### ⚠️ 5. **블록 타임스탬프 조작**
@@ -259,8 +239,6 @@ recipient.transfer(amount);
 ### 📌 **취약 코드 예시**
 
 ```solidity
-solidity
-복사편집
 function lottery() public {
     if (block.timestamp % 2 == 0) {
         winner = msg.sender; // ❌ 조작 가능
@@ -284,8 +262,6 @@ function lottery() public {
 ✅ **보완된 코드**
 
 ```solidity
-solidity
-복사편집
 function lottery() public {
     require(block.timestamp > lastPlayed + 1 hours, "Wait for next round!");
     lastPlayed = block.timestamp;
@@ -345,8 +321,6 @@ Ethereum에는 **selfdestruct()** 라는 함수가 있음.
 ### 📌 **예제 코드**
 
 ```solidity
-solidity
-복사편집
 contract Attacker {
     constructor() payable {} // 이더를 담아둠
 
@@ -385,8 +359,6 @@ Ethereum의 **컨트랙트 주소는 결정론적으로 생성**됨.
 ### 🚨 **📌 실제 공격 사례: EtherGame 컨트랙트**
 
 ```solidity
-solidity
-복사편집
 contract EtherGame {
     uint public finalMileStone = 10 ether;
     uint public depositedWei;
@@ -414,8 +386,6 @@ contract EtherGame {
 - `depositedWei`는 사용자가 직접 송금한 값만을 기록하므로, 외부 공격의 영향을 받지 않음
 
 ```solidity
-solidity
-복사편집
 contract SecureEtherGame {
     uint public finalMileStone = 10 ether;
     uint public depositedWei;
@@ -463,8 +433,6 @@ Parity의 Multisig Wallet 라이브러리는 `initWallet()` 함수를 통해 지
 하지만 `initWallet()` 함수가 **public으로 설정**되어 있어, 누구나 호출 가능!
 
 ```solidity
-solidity
-복사편집
 function initWallet(address[] _owners, uint _required) public {
     m_numOwners = _owners.length;
     m_owners = _owners;
@@ -504,8 +472,6 @@ function initWallet(address[] _owners, uint _required) public {
 **📌 취약 코드 예시:**
 
 ```solidity
-solidity
-복사편집
 contract HashForEther {
     function withdrawWinnings() {
         require(uint32(msg.sender) == 0);  // 특정 주소만 가능
@@ -536,8 +502,6 @@ contract HashForEther {
 **📌 취약 코드 예시:**
 
 ```solidity
-solidity
-복사편집
 contract EncryptionContract {
     Rot13Encryption encryptionLibrary;
 
@@ -559,8 +523,6 @@ contract EncryptionContract {
 - **배포 시 직접 컨트랙트를 생성 (\*\***`new`\*\* **키워드 사용)**
 
 ```solidity
-solidity
-복사편집
 contract SecureEncryptionContract {
     Rot13Encryption public immutable encryptionLibrary;
 
@@ -589,8 +551,6 @@ contract SecureEncryptionContract {
 **📌 취약 코드 예시 (ERC20 토큰 전송):**
 
 ```solidity
-solidity
-복사편집
 function transfer(address to, uint256 value) public returns (bool) {
     to.call{value: value}("");  // ❌ 짧은 주소 공격 가능
     return true;
@@ -606,8 +566,6 @@ function transfer(address to, uint256 value) public returns (bool) {
 - **ERC-20 표준 구현 시** **`safeTransfer`** **사용 (\*\***`OpenZeppelin`\*\* **라이브러리 활용)**
 
 ```solidity
-solidity
-복사편집
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract SecureERC20 {
@@ -636,8 +594,6 @@ contract SecureERC20 {
 ### 📌 취약 코드 예시
 
 ```solidity
-solidity
-복사편집
 contract OwnerWallet {
     address public owner;
 
@@ -670,8 +626,6 @@ contract OwnerWallet {
 - **오타 없이 생성자 설정을 명확하게 할 것**
 
 ```solidity
-solidity
-복사편집
 contract SecureWallet {
     address public owner;
 
@@ -704,8 +658,6 @@ contract SecureWallet {
 ### 📌 취약 코드 예시
 
 ```solidity
-solidity
-복사편집
 // A locked name registrar
 contract NameRegistrar {
     bool public unlocked = false;  // 기본적으로 잠겨 있음
@@ -737,7 +689,7 @@ contract NameRegistrar {
 - **`newRecord`\*\***는 초기화되지 않은 상태에서 사용됨\*\*
 - Solidity에서는 기본적으로 **구조체를** **`storage`\*\***로 설정**하므로, `newRecord`는 **기존 저장소 슬롯을 덮어씀\*\*
 - **공격자가** **`unlocked`** **상태를 변경할 수 있는 특정 값을** **`_name`\*\***에 넣으면, 레지스트리를 강제 해제 가능!\*\*
-<details>
+
 <summary>구체적인 설명</summary>
 
 ### ⚠️ **취약점 발생 이유**
@@ -758,8 +710,6 @@ contract NameRegistrar {
 - **unlocked가 조작되어 true로 변경되면, 원래는 허용되지 않던 등록도 가능**
 - 결국 공격자는 원래는 등록할 수 없는 상태에서도 새로운 이름과 주소를 등록할 수 있음
 
-</details>
-
 ---
 
 ### ✅ 해결 방법
@@ -767,8 +717,6 @@ contract NameRegistrar {
 - **구조체를 메모리에 명시적으로 저장 (\*\***`memory`\*\* **지정자 사용)**
 
 ```solidity
-solidity
-복사편집
 function register(bytes32 _name, address _mappedAddress) public {
     // ✅ 메모리에 선언하여 기존 저장소 덮어쓰기 방지
     NameRecord memory newRecord;
@@ -807,8 +755,6 @@ function register(bytes32 _name, address _mappedAddress) public {
 ### 📌 취약 코드 예시
 
 ```solidity
-solidity
-복사편집
 contract FunWithNumbers {
     uint constant public tokensPerEth = 10;
     uint constant public weiPerEth = 1e18;
@@ -839,8 +785,6 @@ contract FunWithNumbers {
 - **나눗셈 연산 전에 곱셈을 수행하여 정밀도를 유지**
 
 ```solidity
-solidity
-복사편집
 function buyTokens() external payable {
     uint tokens = (msg.value * tokensPerEth) / weiPerEth;  // ✅ 정밀도 유지
     balances[msg.sender] += tokens;
@@ -848,10 +792,6 @@ function buyTokens() external payable {
 ```
 
 ➡️ **계산 순서를 바꿔서 정밀도 손실을 방지**
-
----
-
----
 
 ---
 
