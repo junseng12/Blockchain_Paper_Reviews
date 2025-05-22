@@ -2,6 +2,8 @@
 
 This repository provides in-depth summaries and notes for the 14 chapters of Mastering Ethereum by Andreas M. Antonopoulos and Gavin Wood. Each chapter includes key concepts, technical details, and practical examples to help you gain a comprehensive understanding of the Ethereum ecosystem. ([GitHub][1])
 
+---
+
 ## 📚 Table of Contents
 
 1. **What is Ethereum?**
@@ -46,17 +48,23 @@ This repository provides in-depth summaries and notes for the 14 chapters of Mas
 14. **Consensus**
     Covers Ethereum's consensus algorithm and network consensus mechanism.
 
+---
+
 ## 🎯 Project Goals
 
 - Provides a systematic summary of the contents of “Mastering Ethereum” to give learners a clear understanding.
 - Summarize the core concepts and technical details of each chapter to enable quick review.
 - Support practical learning through hands-on examples and code snippets.
 
+---
+
 ## 🛠️ Usage
 
 1. Open each chapter folder to view the summary and examples for that topic.
 2. Run or modify the code as needed for hands-on practice.
 3. If you have any questions or suggestions for improvement, please create an issue or submit a pull request.
+
+---
 
 ## 🤝 How to Contribute
 
@@ -65,15 +73,20 @@ This project is open source and anyone can contribute.
 - We welcome typo corrections, content improvements, and new examples.
 - Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file before contributing.
 
+---
+
 ## 📄 License
 
 This project is distributed under the [MIT License](LICENSE).
 
+---
+
 ## 📬 Contact
 
-## Please leave any questions or suggestions in Issues or contact [junseng12](https://github.com/junseng12) directly.
+## Please leave any questions or suggestions in Issues or contact[junseng12](https://github.com/junseng12) directly.
 
 ### 🔹 Source
 
 Original: https://github.com/ethereumbook/ethereumbook
+
 Reference: https://github.com/ganadara135/masteringEthereumBookSummary/tree/main
