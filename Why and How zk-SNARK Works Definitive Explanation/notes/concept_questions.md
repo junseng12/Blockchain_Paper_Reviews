@@ -15,14 +15,17 @@
 ## 🔧 CCC 3단계 설계 구조: Commit → Verify → Abort
 
 ### 1️⃣ Commit Phase
+
 - 자산을 잠그거나 조건부로 제출하는 단계
 - 설계 모델: External Custodian, Escrow, Watchtower 등
 
 ### 2️⃣ Verification Phase
+
 - 상대 블록체인의 커밋이 올바른지 검증
 - 방법: SPV, Chain Relay, Direct Observation, ZKP
 
 ### 3️⃣ Abort Phase (Optional)
+
 - 실패하거나 상대가 응답하지 않는 경우 자산을 회수하기 위한 구조
 - 방법: Timelock, Watchtower, Coordinator
 
@@ -39,9 +42,9 @@
 
 ## 🔒 Escrow와 Watchtower의 차이?
 
-| 구조 | 설명 |
-|------|------|
-| Escrow | 조건부 자산 보관자. 자산을 잠가두고 조건 만족 시 풀림 |
+| 구조       | 설명                                                  |
+| ---------- | ----------------------------------------------------- |
+| Escrow     | 조건부 자산 보관자. 자산을 잠가두고 조건 만족 시 풀림 |
 | Watchtower | 자산을 보관하지 않지만 timeout 또는 부정 조건 시 개입 |
 
 ---
@@ -63,12 +66,12 @@
 
 ## 🔄 Exchange vs Migration Protocols
 
-| 항목 | Exchange | Migration |
-|------|----------|-----------|
-| 목적 | 자산 교환 | 자산 이동 |
-| 구조 | 양방향 / 원자성 강조 | 단방향, 자산 wrapping |
-| TTP 사용 | 최소화 경향 | 일반적으로 존재 |
-| 실사례 | HTLC, Arwen, A2L | tBTC, XCLAIM, Sidechains |
+| 항목     | Exchange             | Migration                |
+| -------- | -------------------- | ------------------------ |
+| 목적     | 자산 교환            | 자산 이동                |
+| 구조     | 양방향 / 원자성 강조 | 단방향, 자산 wrapping    |
+| TTP 사용 | 최소화 경향          | 일반적으로 존재          |
+| 실사례   | HTLC, Arwen, A2L     | tBTC, XCLAIM, Sidechains |
 
 ---
 
@@ -78,3 +81,4 @@
 - 구조를 아는 것이 곧 **보안성과 응용성의 핵심**
 - 향후 ZKP, Collateral 설계와 연계한 실무형 CCC 모델 연구가 가능
 
+---

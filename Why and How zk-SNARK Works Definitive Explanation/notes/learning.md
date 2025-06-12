@@ -215,3 +215,118 @@
 | 변수 분리의 목적은?                         | 다수 연산을 다룰 때, 변수마다 독립적 제약을 부여하기 위함        |
 
 ---
+
+## 🧮 Constraint System as Polynomials (`4.7`)
+
+### 4.7.1 Constant Coefficients
+
+- QAP에서 각 Gate 연산을 다항식으로 표현할 때, 변수마다 **상수 계수(coefficient)** 가 정확히 적용되어야 함
+
+- Gate의 위치(x=1,2,3,...)마다 coefficient가 달라지므로, 해당 위치에서 원하는 coefficient가 나오도록 **Lagrange 보간법** 사용
+
+- Gate i에 대해:
+
+  ```
+  L(x) = Σ vᵢ ⋅ lᵢ(x)
+  ```
+
+  - lᵢ(x)는 Gate 위치 i에서 1, 나머지에서 0을 출력
+
+- 최종 QAP 다항식 검증 구조:
+
+  ```
+  P(x) = L(x) × R(x) - O(x) ≡ 0 mod Z(x)
+  ```
+
+- 🚩 **핵심 insight**
+  Gate별 coefficient는 고정 구조로 구성됨 → Prover는 Witness 값만 넣으면 됨 (coefficient 구성은 고정)
+
+### 4.7.2 Addition for Free
+
+- 덧셈(Addition)은 Multiplication처럼 Gate 비용을 사용하지 않고 **공짜(free)** 로 처리 가능
+
+- 덧셈을 다음과 같이 표현:
+
+  ```
+  (Σ cLᵢ ⋅ vᵢ) × 1 = (Σ cOᵢ ⋅ vᵢ)
+  ```
+
+- 즉, R(x)는 항상 1로 설정하여 Multiplication 없이 처리
+
+- L(x), O(x)는 덧셈에 필요한 coefficient만 정확히 구성
+
+- 🚩 **핵심 insight**
+  덧셈은 QAP에서 R(x)=1로 처리 가능 → 효율적인 회로 설계 가능
+
+### 4.7.3 Addition, Subtraction and Division
+
+- **덧셈(Addition)** 은 4.7.2처럼 free로 처리 가능
+
+- **뺄셈(Subtraction)** 은 Addition과 동일 구조에서 coefficient에 **음수(-)** 를 적용하면 됨
+
+  ```
+  (Σ cLᵢ ⋅ vᵢ) × 1 = (Σ cOᵢ ⋅ vᵢ), with negative cLᵢ or cOᵢ
+  ```
+
+- **나눗셈(Division)** 은 상수에 대한 나눗셈일 경우 **곱셈의 역수(1/d)** 로 처리 가능
+
+  ```
+  Division by d → Multiplication by (1/d)
+  ```
+
+- 모든 연산은 (Σ cLᵢ ⋅ vᵢ) × (Σ cRᵢ ⋅ vᵢ) = (Σ cOᵢ ⋅ vᵢ) 형태로 일관되게 구성 가능
+
+- 🚩 **핵심 insight**
+  Addition/Subtraction/Division 모두 QAP 구조에 자연스럽게 포함 가능 → 다양한 산술 연산 지원 가능
+
+---
+
+완벽해 —
+그럼 아까 네가 주신 패턴 그대로 유지해서
+**4.8 전체 (4.8 full 내용 + 네가 질문한 흐름 반영)** 동일 포맷으로 깔끔하게 정리해줄게.
+
+---
+
+## 🧮 Multiple Operations (`4.8`)
+
+### 4.8 Multiple Operations
+
+- 우리가 QAP에서 프로그램을 증명할 때, 특정한 **입력값**을 설정하고 그에 따른 **중간 변수 값**을 계산하여 Witness vector를 구성해야 함
+
+- 논문 예제에서는:
+
+  ```
+  입력값: w = 1, a = 3, b = 2
+  중간 변수: m = a × b = 6
+              v = w(m − a − b) + a + b = 6
+  ```
+
+- Witness vector는 다음과 같이 구성됨:
+
+  ```
+  v = [1, w, a, b, m, v]
+  ```
+
+- 이후, 이 Witness vector의 값들을 L(x), R(x), O(x) 구성 시 coefficient로 사용함
+
+- Gate별로 연산 constraint는 다음과 같은 형태로 QAP에 포함됨:
+
+  ```
+  (Σ cLᵢ ⋅ vᵢ) × (Σ cRᵢ ⋅ vᵢ) = (Σ cOᵢ ⋅ vᵢ)
+  ```
+
+- Lagrange 보간법을 통해 Gate 위치별로 L(x), R(x), O(x)를 구성
+
+- 여기서 중요한 점:
+
+  - **입력값은 Prover가 임의로 설정 가능** (w, a, b는 원하는 값 사용 가능)
+  - **중간 변수는 프로그램 로직에 따라 결정됨** (m, v는 Gate 연산 결과로 고정됨)
+
+- Prover는 L(x), R(x), O(x) 구조만 고정된 상태에서 Witness 값만 정확히 넣어주면 됨
+
+- 결과적으로, 입력값이나 중간 변수 값이 무엇이든 QAP constraint가 만족되면 증명 성공
+
+- 🚩 **핵심 insight**
+  L(x), R(x), O(x)는 Gate 구조로 고정됨 → Prover는 Witness 값만 정확히 넣으면 됨
+  입력값은 자유롭게 설정 가능 (공개/비공개 input으로 구분 가능)
+  중간 변수는 프로그램 흐름에 의해 고정 계산됨 → 이를 기반으로 증명 진행
